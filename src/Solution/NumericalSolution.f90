@@ -1101,6 +1101,10 @@ contains
     real(DP) :: ttform
     real(DP) :: ttsoln
     real(DP) :: dxmax
+    
+    character(len=128) :: amat_filename !MJR
+    logical :: mjr_debug = .false.      !MJR
+    
     ! -- formats
     character(len=*), parameter :: fmtnocnvg =                                 &
       "(1X,'Solution ', i0, ' did not converge for stress period ', i0,        &
@@ -1289,6 +1293,12 @@ contains
           call mp%model_nr(kiter, this%amat, this%nja, 1)
         enddo
         call code_timer(1, ttform, this%ttform)
+          
+        if (mjr_debug) then !MJR: for debugging
+          write(amat_filename, '(a)') 'matrix_'//trim(this%name)//'.crs' 
+          call save_matrix(amat_filename, this%neq, this%ia, this%ja, this%amat)
+        end if
+        
         !
         ! -- linear solve
         call code_timer(0, ttsoln, this%ttsoln)
@@ -2675,4 +2685,27 @@ contains
     return
   end subroutine sln_get_nodeu
 
+  ! print sparse matrix (crs) to file, with zero-based indices
+  subroutine save_matrix(filename, nrows, ia, ja, M) !MJR
+    use InputOutputModule, only:getunit
+    
+    character(len=*), intent(in)              :: filename
+    integer(I4B), intent(in)                  :: nrows
+    integer(I4B), dimension(:), intent(in)    :: ia, ja
+    real(DP), dimension(:), intent(in)        :: M    
+    
+    integer(I4B) :: inunit
+    integer(I4B) :: i,j
+    
+    inunit = getunit()
+    open(inunit, file=filename)    
+    do i=1,nrows
+      do j=ia(i),ia(i+1)-1        
+        write(inunit, *) i-1, ja(j)-1, M(j) ! NB: zero-based
+      enddo
+    enddo
+    close(inunit)
+    
+  end subroutine
+  
 end module NumericalSolutionModule
