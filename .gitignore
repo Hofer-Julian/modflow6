@@ -87,3 +87,6 @@ Thumbs.db
 *.bat
 
 msvs/My Advisor Results*
+
+ftnunit.html
+ftnunit.run
