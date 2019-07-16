@@ -42,7 +42,8 @@ Global
 		{44B7D693-FE26-479C-9E80-2DFF99EFF1C5}.Profile|x64.Build.0 = Release|Win32
 		{44B7D693-FE26-479C-9E80-2DFF99EFF1C5}.Release|Win32.ActiveCfg = Release|Win32
 		{44B7D693-FE26-479C-9E80-2DFF99EFF1C5}.Release|Win32.Build.0 = Release|Win32
-		{44B7D693-FE26-479C-9E80-2DFF99EFF1C5}.Release|x64.ActiveCfg = Release|Win32
+		{44B7D693-FE26-479C-9E80-2DFF99EFF1C5}.Release|x64.ActiveCfg = Release|x64
+		{44B7D693-FE26-479C-9E80-2DFF99EFF1C5}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
