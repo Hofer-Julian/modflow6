@@ -1107,7 +1107,7 @@ contains
     real(DP) :: dxmax
     
     character(len=128) :: amat_filename !MJR
-    logical :: mjr_debug = .false.      !MJR
+    logical :: mjr_debug = .true.      !MJR
     
     ! -- formats
     character(len=*), parameter :: fmtnocnvg =                                 &
@@ -1537,7 +1537,7 @@ contains
     !
     ! -- Add connection coefficients to the solution
     do ic=1,this%connectionlist%Count()
-    mc => GetConnectionFromList(this%connectionlist, ic)
+      mc => GetConnectionFromList(this%connectionlist, ic)
       call mc%mc_fc(kiter, this%ia, this%amat, inewton)
     enddo
     !
