@@ -18,6 +18,7 @@ module ListModule
     procedure, public :: Add
     procedure, public :: Clear
     procedure, public :: Count
+    procedure, public :: Contains
     procedure, public :: DeallocateBackward
     procedure, public :: GetNextItem
     procedure, public :: GetPreviousItem
@@ -50,7 +51,14 @@ module ListModule
     ! -- Private procedures
     procedure, private :: DeallocValue
   end type ListNodeType
-
+  
+  interface
+    function isEqualIface(obj1, obj2) result(isEqual)
+      class(*), pointer :: obj1, obj2
+      logical :: isEqual
+    end function
+  end interface
+  
 contains
 
   ! -- Public type-bound procedures for ListType
@@ -143,6 +151,31 @@ contains
     return
   end function Count
 
+  function Contains(this, obj, isEqual) result(hasObj)
+    class(ListType), intent(inout) :: this
+    class(*), pointer :: obj
+    procedure(isEqualIface), pointer, intent(in) :: isEqual
+    logical :: hasObj
+    ! local
+    type(ListNodeType), pointer :: current => null()
+    type(ListNodeType), pointer :: next => null()
+   
+    hasObj = .false.
+    current => this%firstNode
+    do while (associated(current))
+      if (isEqual(current%Value, obj)) then
+        hasObj = .true.
+        return
+      end if
+      
+      ! -- Advance to the next node
+      current => current%nextNode
+    enddo
+    
+    ! this means there is no match
+    return
+  end function
+  
   subroutine DeallocateBackward(this, fromNode)
     ! **************************************************************************
     ! DeallocateBackward
