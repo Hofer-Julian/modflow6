@@ -100,12 +100,6 @@ module ConnectionsModule
     call mem_deallocate(this%cl1)
     call mem_deallocate(this%cl2)     
     !
-    if (associated(this%mask, this%ja)) then
-      nullify(this%mask)
-    else
-      call mem_deallocate(this%mask)
-    end if  
-    !
     ! -- return
     return
   end subroutine con_da
