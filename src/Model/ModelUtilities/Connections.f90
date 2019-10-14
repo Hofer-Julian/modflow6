@@ -92,7 +92,6 @@ module ConnectionsModule
     ! -- Arrays
     call mem_deallocate(this%ia)
     call mem_deallocate(this%ja)  
-    call mem_deallocate(this%mask)
     call mem_deallocate(this%isym)
     call mem_deallocate(this%jas)
     call mem_deallocate(this%hwva)
@@ -100,6 +99,12 @@ module ConnectionsModule
     call mem_deallocate(this%ihc)
     call mem_deallocate(this%cl1)
     call mem_deallocate(this%cl2)     
+    !
+    if (associated(this%mask, this%ja)) then
+      nullify(this%mask)
+    else
+      call mem_deallocate(this%mask)
+    end if  
     !
     ! -- return
     return
@@ -152,7 +157,6 @@ module ConnectionsModule
     ! -- allocate space for connection arrays
     call mem_allocate(this%ia, this%nodes+1, 'IA', this%cid)
     call mem_allocate(this%ja, this%nja, 'JA', this%cid)
-    call mem_allocate(this%mask, this%nja, 'MASK', this%cid)
     call mem_allocate(this%isym, this%nja, 'ISYM', this%cid)
     call mem_allocate(this%jas, this%nja, 'JAS', this%cid)
     call mem_allocate(this%hwva, this%njas, 'HWVA', this%cid)
@@ -218,10 +222,6 @@ module ConnectionsModule
     this%njas = (this%nja - this%nodes) / 2
     !
     call this%allocate_arrays()
-    ! TODO_MJR: we now have to set the default in 3 places (for dis, disv, disu)
-    do n = 1, this%nja
-      this%mask = 1  
-    end do
     !
     ! -- allocate temporary arrays for reading
     allocate(ihctemp(this%nja))
@@ -815,10 +815,6 @@ module ConnectionsModule
     !
     ! -- Allocate index arrays of size nja and symmetric arrays
     call this%allocate_arrays()
-    ! TODO_MJR: we now have to set the default in 3 places (for dis, disv, disu)
-    do n = 1, this%nja
-      this%mask = 1  
-    end do
     !
     ! -- Fill the IA and JA arrays from sparse, then destroy sparse
     call sparse%filliaja(this%ia, this%ja, ierror)
@@ -987,10 +983,6 @@ module ConnectionsModule
     !
     ! -- Allocate index arrays of size nja and symmetric arrays
     call this%allocate_arrays()
-    ! TODO_MJR: we now have to set the default in 3 places (for dis, disv, disu)
-    do n = 1, this%nja
-      this%mask = 1  
-    end do
     !
     ! -- Fill the IA and JA arrays from sparse, then destroy sparse
     call sparse%sort()
