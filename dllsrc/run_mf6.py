@@ -2,6 +2,7 @@ import sys
 import numpy as np
 from ctypes import *
 
+
 nargs = len(sys.argv) - 1
 if nargs < 1:
     sys.exit()

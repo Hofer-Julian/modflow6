@@ -20,7 +20,6 @@ module MemoryManagerModule
   ! TODO_MJR: do we want to expose these like this?
   public :: get_var_size
   public :: get_isize
-  public :: setptr_dbl1d
   public :: copy_dbl1d
   
   type(MemoryListType) :: memorylist
